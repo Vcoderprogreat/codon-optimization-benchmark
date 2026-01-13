@@ -8,8 +8,6 @@ def run_custom_optimizer(dna_seq):
     """
     start_time = time.time()
     
-    # We call the external CLI tool you built
-    # Method can be 'stochastic' or 'greedy'
     try:
         result = subprocess.run(
             ["python", "codon_optimizer_cli.py", "-s", dna_seq, "-c", "human_codon_usage.csv", "--method", "stochastic"],
@@ -19,10 +17,8 @@ def run_custom_optimizer(dna_seq):
         )
         runtime = time.time() - start_time
         
-        # The tool prints 4 lines: Original, Optimized, Orig CAI, Opt CAI
         lines = result.stdout.strip().split('\n')
         
-        # Output standardized for the master benchmark script
         print(lines[0]) # Original
         print(lines[1]) # Optimized
         print(lines[2]) # Original CAI
