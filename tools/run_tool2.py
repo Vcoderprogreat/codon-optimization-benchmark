@@ -2,8 +2,9 @@
 import argparse
 import time
 from dnachisel import DnaOptimizationProblem, CodonOptimize, EnforceTranslation
-from cai2 import CAI  # Updated to use the working cai2 library
+from cai2 import CAI
 
+# Standard Human Weights for consistent CAI calculation
 HUMAN_WEIGHTS = {
     'TTT': 0.45, 'TTC': 1.0, 'TTA': 0.08, 'TTG': 0.13, 'CTT': 0.13, 'CTC': 0.2,
     'CTA': 0.07, 'CTG': 1.0, 'ATT': 0.36, 'ATC': 0.47, 'ATA': 0.17, 'ATG': 1.0,
@@ -18,23 +19,19 @@ HUMAN_WEIGHTS = {
     'GGG': 0.25, 'TAA': 1.0, 'TAG': 1.0, 'TGA': 1.0
 }
 
-def run_dnachisel(dna_seq):
-    """
-    Optimizes a DNA sequence using DNA Chisel for Human (H. sapiens) expression.
-    """
+def run_tool_2(dna_seq):
     start_time = time.time()
     
+    # Tool 2: Constraint-based Optimization
     problem = DnaOptimizationProblem(
         sequence=dna_seq,
         constraints=[EnforceTranslation()],
         objectives=[CodonOptimize(species="h_sapiens")]
     )
-    
     problem.optimize()
     optimized_seq = problem.sequence
+    
     runtime = time.time() - start_time
-
-    # Calculate CAI scores (Quality Metric)
     orig_cai = CAI(dna_seq, weights=HUMAN_WEIGHTS)
     opt_cai = CAI(optimized_seq, weights=HUMAN_WEIGHTS)
 
@@ -45,11 +42,7 @@ def run_dnachisel(dna_seq):
     print(f"Runtime: {runtime:.6f}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Professional Codon Optimization Tool (DNA Chisel)")
-    parser.add_argument("-s", "--sequence", type=str, required=True, help="Input DNA sequence")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--sequence", type=str, required=True)
     args = parser.parse_args()
-    
-    if len(args.sequence) % 3 != 0:
-        print("Error: Sequence length must be a multiple of 3.")
-    else:
-        run_dnachisel(args.sequence.upper())
+    run_tool_2(args.sequence.upper())
