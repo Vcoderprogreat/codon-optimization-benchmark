@@ -1,0 +1,6 @@
+biopython
+dnachisel
+cai2
+pandas
+matplotlib
+seaborn
