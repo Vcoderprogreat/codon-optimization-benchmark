@@ -1,40 +1,39 @@
 import subprocess
 import time
-import csv
+import sys
 
-sequences = [
-    "ATGTTTCCCGGG",
-    "ATGCGTACGTAG",
-    "ATGAAACCCGGGTTT"
-]
+def run_custom_optimizer(dna_seq):
+    """
+    Wrapper for MyTool (Stochastic/Greedy optimization).
+    """
+    start_time = time.time()
+    
+    # We call the external CLI tool you built
+    # Method can be 'stochastic' or 'greedy'
+    try:
+        result = subprocess.run(
+            ["python", "codon_optimizer_cli.py", "-s", dna_seq, "-c", "human_codon_usage.csv", "--method", "stochastic"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        runtime = time.time() - start_time
+        
+        # The tool prints 4 lines: Original, Optimized, Orig CAI, Opt CAI
+        lines = result.stdout.strip().split('\n')
+        
+        # Output standardized for the master benchmark script
+        print(lines[0]) # Original
+        print(lines[1]) # Optimized
+        print(lines[2]) # Original CAI
+        print(lines[3]) # Optimized CAI
+        print(f"Runtime: {runtime:.6f}")
 
-output_file = "benchmark_results.csv"
+    except Exception as e:
+        print(f"Error running MyTool: {e}")
 
-with open(output_file, "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow(["Sequence", "Tool", "Optimized_Sequence", "Original_CAI", "Optimized_CAI", "Runtime_sec"])
-
-for seq in sequences:
-    start = time.time()
-    # Call your CLI tool
-    result = subprocess.run(
-        ["python", "codon_optimizer_cli.py", "-s", seq, "-c", "human_codon_usage.csv", "--method", "stochastic"],
-        capture_output=True,
-        text=True
-    )
-    end = time.time()
-    runtime = end - start
-
-  
-    lines = result.stdout.splitlines()
-    orig_seq = lines[0].split(": ")[1]
-    opt_seq = lines[1].split(": ")[1]
-    orig_cai = float(lines[2].split(": ")[1])
-    opt_cai = float(lines[3].split(": ")[1])
-
-   
-    with open(output_file, "a", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow([seq, "MyTool", opt_seq, orig_cai, opt_cai, runtime])
-
-print(f"Benchmark finished. all the  results saved to {output_file}")
+if __name__ == "__main__":
+    if len(sys.argv) < 3 or sys.argv[1] != "-s":
+        print("Usage: python run_my_tool.py -s <SEQUENCE>")
+    else:
+        run_custom_optimizer(sys.argv[2].upper())
