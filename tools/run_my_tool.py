@@ -3,9 +3,6 @@ import time
 import sys
 
 def run_custom_optimizer(dna_seq):
-    """
-    Wrapper for MyTool (Stochastic/Greedy optimization).
-    """
     start_time = time.time()
     
     try:
@@ -19,8 +16,11 @@ def run_custom_optimizer(dna_seq):
         
         lines = result.stdout.strip().split('\n')
         
-        print(lines[0]) # Original
-        print(lines[1]) # Optimized
+        print(lines[0])
+        
+        opt_seq = lines[1].split(": ")[1].replace('U', 'T')
+        print(f"Optimized: {opt_seq}")
+        
         print(lines[2]) # Original CAI
         print(lines[3]) # Optimized CAI
         print(f"Runtime: {runtime:.6f}")
