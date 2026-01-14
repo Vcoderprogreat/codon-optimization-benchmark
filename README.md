@@ -19,10 +19,10 @@ I wanted to make sure the comparison was as fair as possible, so I set up a stan
 
 ## 4. Key Results
 
-The table below summarizes the performance on the most complex test case (protein_long.faa):
-*MyTool | 1.00* Optimized CAI | 8.258 Runtime (seconds)
-DNAChisel | 0.42 Optimized CAI | 2.561 Runtime (seconds)
-Greedy Baseline | 0.40 Optimized CAI| 0.980 Runtime (seconds)
+This summarizes the performance on the most complex test case (protein_long.faa):
+MyTool, 1.00 Optimized CAI, 8.258 Runtime (seconds)
+DNAChisel, 0.42 Optimized CAI, 2.561 Runtime (seconds)
+Greedy Baseline, 0.40 Optimized CAI, 0.980 Runtime (seconds)
 
 <img width="1584" height="614" alt="benchmark_summary" src="https://github.com/user-attachments/assets/55a1dfc9-1ea4-4fc9-b8fd-4c0304f60e90" />
 
